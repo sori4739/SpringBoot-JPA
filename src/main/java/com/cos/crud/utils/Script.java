@@ -11,10 +11,10 @@ public class Script {
 		return sb.toString();
 	}
 	
-	public static String home() {
+	public static String href(String location) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("<script>");
-		sb.append("location.href='/'");
+		sb.append("location.href='"+location+"';");
 		
 		sb.append("</script>");
 		

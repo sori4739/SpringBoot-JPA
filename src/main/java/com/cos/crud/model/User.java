@@ -3,11 +3,15 @@ package com.cos.crud.model;
 
 import java.sql.Timestamp;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,5 +32,7 @@ public class User {
 	private String password;
 	private String phone;
 	private String email;
+	
+	@CreationTimestamp
 	private Timestamp createDate;
 }

@@ -11,8 +11,10 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,6 +30,8 @@ public class Board {
 	private int id;
 	private String title;
 	private String content;
+	
+	//@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="userId")
 	private User user;

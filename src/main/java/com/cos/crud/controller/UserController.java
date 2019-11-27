@@ -28,11 +28,11 @@ public class UserController {
 	public @ResponseBody String userLogin(User user, HttpSession session) {
 		User u = mRepo.findByEmailAndPassword(user.getEmail(), user.getPassword());
 		if (u != null) {
-			session.setAttribute("user", user);
-			return Script.home();
+			session.setAttribute("user", u);
+			return Script.href("/");
 
 		} else {
-			return Script.back("songyungmin ddolchu");
+			return Script.back("i kill onejina");
 			
 		}
 		
