@@ -1,7 +1,6 @@
 package com.cos.crud.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,38 +13,48 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.crud.model.Board;
-import com.cos.crud.model.User;
-import com.cos.crud.repository.BoardRepository;
+import com.cos.crud.service.BoardService;
+import com.cos.crud.utils.Script;
 
 @Controller
 @RequestMapping("/board")
 public class BoardController {
 
 	@Autowired
-	BoardRepository mRepo;
-
+	private BoardService mService;
+	
+	
+	@PostMapping("/ict/songyungmin-gae-ssibalnoma/{id}")
+	public @ResponseBody String increaseCountAndTimeUpdate(@PathVariable int id) {
+		mService.increaseCountAndTimeUpdate(id);
+		return "테스트 완료";
+	}
+	
 	@GetMapping("/list")
 	public String boardList(Model model) {
-		List<Board> boards = mRepo.findAll();
+		List<Board> boards = mService.boardList();
 		model.addAttribute("boards", boards);
 		return "/board/list";
 	}
 
 	@GetMapping("/detail/{id}")
 	public String boardDetail(@PathVariable int id, Model model) {
-		Optional<Board> board = mRepo.findById(id);
-		model.addAttribute("board", board.get());
+		Board board = mService.boardDetail(id);
+		model.addAttribute("board", board);
 		return "/board/detail";
 	}
 
 	@PostMapping("/write")
 	public String boardWrite(Board board, HttpSession session) {
-		User user = (User) session.getAttribute("user");
-		board.setUser(user);
-		mRepo.save(board);
-		return "redirect:/board/list";
+		int result = mService.boardWrite(board, session);
+		if(result == 1) {
+			return "redirect:/board/list";
+		}else {
+			return "/board/writeForm";
+		}
 
 	}
 
@@ -56,27 +65,31 @@ public class BoardController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public String boardDelete(@PathVariable int id) {
-		mRepo.deleteById(id);
-		return "redirect:/board/list";
+	public @ResponseBody String boardDelete(@PathVariable int id) {
+		int result = mService.boardDelete(id);
+		if(result == 1) {
+			return Script.href("/board/list");
+		}else {
+			return Script.back("삭제실패");
+		}
 	}
 
 	@PutMapping("/update")
-	public String boardUpdate(Board board) {
+	public @ResponseBody String boardUpdate(Board board) {
 		// 세션있어야 되는데 안해
-		Optional<Board> b = mRepo.findById(board.getId());
-		b.get().setContent(board.getContent());
-		b.get().setTitle(board.getTitle());
-
-		mRepo.save(b.get());
-		return "redirect:/board/list";
+		int result = mService.boardUpdate(board);
+		if(result == 1) {
+			return Script.href("/board/update");			
+		}else {
+			return Script.back("업데이트 실패");
+		}
 	}
 
 	@GetMapping("/updateForm/{id}")
 	public String boardUpdateForm(@PathVariable int id, Model model) {
 		// 세션있어야 되는데 안해
-		Optional<Board> board = mRepo.findById(id);
-		model.addAttribute("board", board.get());
+		Board board = mService.boardUpdateForm(id);
+		model.addAttribute("board", board);
 		return "/board/updateForm";
 	}
 }

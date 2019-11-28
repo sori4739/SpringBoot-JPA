@@ -9,12 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
-
-
 import lombok.AllArgsConstructor;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +28,8 @@ public class Board {
 	private int id;
 	private String title;
 	private String content;
-	
+    @ColumnDefault("0") //default 0
+	private int count;
 	//@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="userId")

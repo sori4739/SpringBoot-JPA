@@ -1,20 +1,24 @@
 package com.cos.crud.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import javax.servlet.http.HttpServletResponse;
+
+
+import java.util.List;
+
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cos.crud.model.User;
-import com.cos.crud.repository.UserRepository;
+
+import com.cos.crud.service.UserService;
 import com.cos.crud.utils.Script;
 
 @Controller
@@ -22,20 +26,23 @@ import com.cos.crud.utils.Script;
 public class UserController {
 
 	@Autowired
-	private UserRepository mRepo;
-
+	private UserService mService;
+	
+	@GetMapping("/{id}")
+	public @ResponseBody List<User> getUser(@PathVariable int id){
+		return mService.getUser(id);
+	}
+	
 	@PostMapping("/login")
 	public @ResponseBody String userLogin(User user, HttpSession session) {
-		User u = mRepo.findByEmailAndPassword(user.getEmail(), user.getPassword());
+		User u = mService.userLogin(user);
 		if (u != null) {
 			session.setAttribute("user", u);
 			return Script.href("/");
 
 		} else {
 			return Script.back("i kill onejina");
-			
 		}
-		
 	}
 
 	@GetMapping("/loginForm")
@@ -45,8 +52,11 @@ public class UserController {
 
 	@PostMapping("/join")
 	public String userJoin(User user) {
-		mRepo.save(user);
-		return "redirect:/";
+		int result = mService.userJoin(user);
+		if(result == 1) {
+			return "redirect:/board/list";
+		}
+		return "redirect:/user/joinForm";
 	}
 
 	@GetMapping("/joinForm")
