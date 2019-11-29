@@ -3,15 +3,15 @@ package com.cos.crud.model;
 
 import java.sql.Timestamp;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@DynamicInsert
 
 public class User {
 	@Id
@@ -32,7 +33,8 @@ public class User {
 	private String password;
 	private String phone;
 	private String email;
-	
+	@ColumnDefault("'user'")//문자는 홑따옴표
+	private String role;
 	@CreationTimestamp
 	private Timestamp createDate;
 }

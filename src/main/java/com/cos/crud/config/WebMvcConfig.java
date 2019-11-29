@@ -18,9 +18,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
             .excludePathPatterns("/board/list")
             .excludePathPatterns("/board/detail/**");
       
-		/*
-		 * registry.addInterceptor(new AdminInterceptor())
-		 * .addPathPatterns("/admin/**"); }
-		 */
+		
+		  registry.addInterceptor(new AdminInterceptor())
+		  .addPathPatterns("/admin/**"); }
+		 
    }
-}

@@ -38,7 +38,7 @@ public class UserController {
 		User u = mService.userLogin(user);
 		if (u != null) {
 			session.setAttribute("user", u);
-			return Script.href("/");
+			return Script.href("/board/list");
 
 		} else {
 			return Script.back("i kill onejina");

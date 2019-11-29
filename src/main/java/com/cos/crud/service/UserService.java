@@ -30,6 +30,7 @@ public class UserService {
 	}
 
 	public int userJoin(User user) {
+		
 		try {
 			mRepo.save(user);
 			return 1;

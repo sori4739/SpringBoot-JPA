@@ -26,8 +26,8 @@ public class BoardController {
 	@Autowired
 	private BoardService mService;
 	
-	
-	@PostMapping("/ict/songyungmin-gae-ssibalnoma/{id}")
+	//트랜잭션 테스트
+	@PostMapping("/ict/{id}")
 	public @ResponseBody String increaseCountAndTimeUpdate(@PathVariable int id) {
 		mService.increaseCountAndTimeUpdate(id);
 		return "테스트 완료";
